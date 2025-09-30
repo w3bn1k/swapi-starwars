@@ -30,7 +30,6 @@ type TCharacterTableWithPagination = {
     loading?: boolean;
     currentPage: number;
     totalPages: number;
-    totalCount: number;
     onPageChange: (page: number) => void;
     onCharacterSelect?: (character: CharacterWithDetails) => void;
     onEdit?: (character: CharacterWithDetails) => void;
@@ -187,7 +186,6 @@ export function CharacterTableWithPagination({
     loading = false,
     currentPage,
     totalPages,
-    totalCount,
     onPageChange,
     onCharacterSelect,
     onEdit,
@@ -225,7 +223,7 @@ export function CharacterTableWithPagination({
             <TableContainer
                 component={Paper}
                 sx={{
-                    maxHeight: 600,
+                    maxHeight: 'none',
                     width: '100%',
                     overflow: 'hidden'
                 }}
@@ -280,7 +278,6 @@ export function CharacterTableWithPagination({
             <Pagination
                 currentPage={currentPage}
                 totalPages={totalPages}
-                totalCount={totalCount}
                 onPageChange={onPageChange}
                 loading={loading}
             />

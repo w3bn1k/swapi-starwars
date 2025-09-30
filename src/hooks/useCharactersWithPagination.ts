@@ -4,6 +4,7 @@ import { swapiApi, extractCharacterId } from '@/utils/api';
 import { useCharacterStore } from '@/stores/characterStore';
 import type { Character, CharacterWithDetails } from '@/types/swapi';
 
+
 interface UseCharactersWithPaginationReturn {
     characters: CharacterWithDetails[];
     loading: boolean;
@@ -74,7 +75,7 @@ export function useCharactersWithPagination(): UseCharactersWithPaginationReturn
         isLoading: charactersLoading,
         error: charactersError,
     } = useQuery({
-        queryKey: ['characters', searchQuery],
+        queryKey: ['characters', searchQuery, currentPage],
         queryFn: async () => {
             if (searchQuery) {
                 const response = await swapiApi.getCharacters({
@@ -83,24 +84,8 @@ export function useCharactersWithPagination(): UseCharactersWithPaginationReturn
                 });
                 return response;
             } else {
-                const allCharacters: Character[] = [];
-                let page = 1;
-                let hasMore = true;
-
-                while (hasMore) {
-                    const response = await swapiApi.getCharacters({ page });
-                    allCharacters.push(...response.results);
-
-                    hasMore = response.next !== null;
-                    page++;
-                }
-
-                return {
-                    count: allCharacters.length,
-                    next: null,
-                    previous: null,
-                    results: allCharacters
-                };
+                const response = await swapiApi.getCharacters({ page: currentPage });
+                return response;
             }
         },
         staleTime: 30 * 60 * 1000,
@@ -162,10 +147,8 @@ export function useCharactersWithPagination(): UseCharactersWithPaginationReturn
                 return id ? !deletedCharacterIds.has(id) : true;
             });
 
-        const startIndex = (currentPage - 1) * 12;
-        const endIndex = startIndex + 12;
 
-        return allCharacters.slice(startIndex, endIndex);
+        return allCharacters;
     }, [enrichedCharacters, editedCharacters, deletedCharacterIds, currentPage]);
 
     const searchCharacters = useCallback((query: string) => {
@@ -178,9 +161,34 @@ export function useCharactersWithPagination(): UseCharactersWithPaginationReturn
     }, []);
 
     const totalCount = charactersData?.count || 0;
-    const totalPages = Math.ceil(totalCount / 12);
+    const totalPages = Math.ceil(totalCount / 10);
     const loading = charactersLoading || (isEnriching && enrichedCharacters.length === 0);
     const error = charactersError?.message || enrichmentError?.message || null;
+
+    useQuery({
+        queryKey: ['preload-characters', totalPages],
+        queryFn: async () => {
+            if (totalPages <= 1) return;
+
+            const preloadPromises = [];
+            for (let page = 2; page <= Math.min(totalPages, 5); page++) {
+                preloadPromises.push(
+                    swapiApi.getCharacters({ page }).then(response => {
+                        console.log(`Preloaded page ${page}:`, response.results.length, 'characters');
+                        return response;
+                    })
+                );
+            }
+
+            await Promise.all(preloadPromises);
+        },
+        enabled: !!totalPages && totalPages > 1,
+        staleTime: 30 * 60 * 1000,
+        gcTime: 60 * 60 * 1000,
+        refetchOnMount: false,
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false,
+    });
 
     return {
         characters: processedCharacters,

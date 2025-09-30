@@ -25,7 +25,6 @@ export default function Home() {
     characters,
     loading,
     error,
-    totalCount,
     currentPage,
     totalPages,
     searchCharacters,
@@ -156,7 +155,6 @@ export default function Home() {
             loading={loading}
             currentPage={currentPage}
             totalPages={totalPages}
-            totalCount={totalCount}
             onPageChange={setPage}
             onCharacterSelect={handleCharacterSelect}
             onEdit={handleEdit}
