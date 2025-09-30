@@ -132,17 +132,6 @@ This app is designed to work perfectly on:
 
 No matter what device you're using, the Force will be with you! ⭐
 
-## 🤝 Want to Contribute?
-
-We'd love your help to make this app even better! Here's how:
-
-1. Fork this repository
-2. Create a branch for your feature (`git checkout -b feature/amazing-feature`)
-3. Make your changes
-4. Commit your changes (`git commit -m 'Add amazing feature'`)
-5. Push to your branch (`git push origin feature/amazing-feature`)
-6. Open a Pull Request
-
 **May the Force be with you!** ⭐
 
 *"Do or do not, there is no try."* - Yoda

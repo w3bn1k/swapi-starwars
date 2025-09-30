@@ -1,0 +1,22 @@
+{
+    "name": "Star Wars Characters",
+    "short_name": "SW Characters",
+    "description": "Explore Star Wars characters with detailed information",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#000000",
+    "theme_color": "#1976d2",
+    "icons": [
+        {
+            "src": "/favicon.ico",
+            "sizes": "64x64 32x32 24x24 16x16",
+            "type": "image/x-icon"
+        }
+    ],
+    "categories": [
+        "entertainment",
+        "lifestyle"
+    ],
+    "lang": "en",
+    "orientation": "portrait-primary"
+}
