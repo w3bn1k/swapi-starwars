@@ -10,6 +10,8 @@ import {
     Typography,
     Box,
     Alert,
+    useMediaQuery,
+    useTheme,
 } from '@mui/material';
 import { Delete as DeleteIcon, Cancel as CancelIcon } from '@mui/icons-material';
 import { useNotifications } from '@/hooks/useNotifications';
@@ -24,6 +26,8 @@ type TCharacterDeleteModal = {
 
 export function CharacterDeleteModal({ character, open, onClose, onConfirm }: TCharacterDeleteModal) {
     const { addSuccessNotification, addErrorNotification } = useNotifications();
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
     const handleDelete = (): void => {
         try {
@@ -50,7 +54,7 @@ export function CharacterDeleteModal({ character, open, onClose, onConfirm }: TC
             <DialogTitle>
                 <Box display="flex" alignItems="center" gap={1}>
                     <DeleteIcon color="error" />
-                    <Typography variant="h6">Delete Character</Typography>
+                    <Typography variant="h4">Delete Character</Typography>
                 </Box>
             </DialogTitle>
 
@@ -79,11 +83,19 @@ export function CharacterDeleteModal({ character, open, onClose, onConfirm }: TC
                 </Box>
             </DialogContent>
 
-            <DialogActions>
+            <DialogActions sx={{ gap: 2, justifyContent: 'center' }}>
                 <Button
                     onClick={handleCancel}
                     startIcon={<CancelIcon />}
                     color="inherit"
+                    size="large"
+                    sx={{
+                        minWidth: 140,
+                        fontSize: isMobile ? '0.75rem' : '0.875rem',
+                        '& .MuiButton-startIcon': {
+                            fontSize: isMobile ? '1rem' : '1.25rem',
+                        }
+                    }}
                 >
                     Cancel
                 </Button>
@@ -92,6 +104,14 @@ export function CharacterDeleteModal({ character, open, onClose, onConfirm }: TC
                     startIcon={<DeleteIcon />}
                     variant="contained"
                     color="error"
+                    size="large"
+                    sx={{
+                        minWidth: 140,
+                        fontSize: isMobile ? '0.75rem' : '0.875rem',
+                        '& .MuiButton-startIcon': {
+                            fontSize: isMobile ? '1rem' : '1.25rem',
+                        }
+                    }}
                 >
                     Delete Character
                 </Button>

@@ -34,7 +34,6 @@ import { useCharacterStore } from '@/stores/characterStore';
 import { CharacterEditModal } from '@/components/CharacterEditModal';
 import { CharacterDeleteModal } from '@/components/CharacterDeleteModal';
 import { ResponsiveContainer } from '@/components/ResponsiveContainer';
-import { MobileNavigation } from '@/components/MobileNavigation';
 import { NotificationSnackbar } from '@/components/ui/NotificationSnackbar';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { extractCharacterId } from '@/utils/api';
@@ -127,7 +126,6 @@ export default function CharacterPage() {
     if (error) {
         return (
             <>
-                <MobileNavigation title="Character Details" />
                 <ResponsiveContainer sx={{ pt: isMobile ? 8 : 4 }}>
                     <Alert severity="error" sx={{ mb: 2 }}>
                         {error}
@@ -158,7 +156,6 @@ export default function CharacterPage() {
     if (!localCharacter) {
         return (
             <>
-                <MobileNavigation title="Character Details" />
                 <ResponsiveContainer sx={{ pt: isMobile ? 8 : 4 }}>
                     <Typography variant="h6" color="text.secondary">
                         Character not found
@@ -189,7 +186,6 @@ export default function CharacterPage() {
 
     return (
         <>
-            <MobileNavigation title={localCharacter.name} />
 
             <ResponsiveContainer sx={{ pt: isMobile ? 8 : 4 }}>
                 <Box

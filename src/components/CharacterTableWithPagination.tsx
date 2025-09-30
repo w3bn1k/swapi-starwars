@@ -13,6 +13,8 @@ import {
     Tooltip,
     CircularProgress,
     Chip,
+    useMediaQuery,
+    useTheme,
 } from '@mui/material';
 import {
     Edit as EditIcon,
@@ -41,13 +43,15 @@ const CharacterRow = React.memo(({
     onCharacterSelect,
     onEdit,
     onDelete,
-    isCharacterEdited
+    isCharacterEdited,
+    isMobile
 }: {
     character: CharacterWithDetails;
     onCharacterSelect: ((character: CharacterWithDetails) => void) | undefined;
     onEdit: ((character: CharacterWithDetails) => void) | undefined;
     onDelete: ((character: CharacterWithDetails) => void) | undefined;
     isCharacterEdited: ((id: string) => boolean) | undefined;
+    isMobile: boolean;
 }) => {
     const characterId = extractCharacterId(character.url);
     const isEdited = characterId ? isCharacterEdited?.(characterId) || false : false;
@@ -118,20 +122,22 @@ const CharacterRow = React.memo(({
                     )}
                 </Box>
             </TableCell>
-            <TableCell>
-                <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    sx={{
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                        whiteSpace: 'nowrap',
-                    }}
-                    title={character.filmsDetails?.map(film => film.title).join(', ') || 'N/A'}
-                >
-                    {character.filmsDetails?.map(film => film.title).join(', ') || 'N/A'}
-                </Typography>
-            </TableCell>
+            {!isMobile && (
+                <TableCell>
+                    <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        sx={{
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                        }}
+                        title={character.filmsDetails?.map(film => film.title).join(', ') || 'N/A'}
+                    >
+                        {character.filmsDetails?.map(film => film.title).join(', ') || 'N/A'}
+                    </Typography>
+                </TableCell>
+            )}
             <TableCell>
                 <Box sx={{ display: 'flex', gap: 0.5 }}>
                     <Tooltip title="Edit Character">
@@ -188,6 +194,8 @@ export function CharacterTableWithPagination({
     onDelete,
     isCharacterEdited,
 }: TCharacterTableWithPagination) {
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     if (loading) {
         return (
             <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: 200, gap: 2 }}>
@@ -234,20 +242,22 @@ export function CharacterTableWithPagination({
                             maxWidth: 0,
                         },
                         '& .MuiTableCell-root:first-of-type': {
-                            width: '25%',
+                            width: isMobile ? '70%' : '25%',
                         },
                         '& .MuiTableCell-root:nth-of-type(2)': {
-                            width: '60%',
+                            width: isMobile ? '30%' : '60%',
                         },
                         '& .MuiTableCell-root:last-of-type': {
-                            width: '15%',
+                            width: isMobile ? '30%' : '15%',
                         },
                     }}
                 >
                     <TableHead>
                         <TableRow>
                             <TableCell sx={{ fontWeight: 'bold' }}>Name</TableCell>
-                            <TableCell sx={{ fontWeight: 'bold' }}>Films</TableCell>
+                            {!isMobile && (
+                                <TableCell sx={{ fontWeight: 'bold' }}>Films</TableCell>
+                            )}
                             <TableCell sx={{ fontWeight: 'bold' }}>Actions</TableCell>
                         </TableRow>
                     </TableHead>
@@ -260,6 +270,7 @@ export function CharacterTableWithPagination({
                                 onEdit={onEdit}
                                 onDelete={onDelete}
                                 isCharacterEdited={isCharacterEdited}
+                                isMobile={isMobile}
                             />
                         ))}
                     </TableBody>

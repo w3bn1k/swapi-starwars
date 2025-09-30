@@ -5,7 +5,6 @@ import { Typography, Box, useMediaQuery, useTheme } from '@mui/material';
 import { CharacterSearch } from '@/components/CharacterSearch';
 import { CharacterTableWithPagination } from '@/components/CharacterTableWithPagination';
 import { ResponsiveContainer } from '@/components/ResponsiveContainer';
-import { MobileNavigation } from '@/components/MobileNavigation';
 import { PageTransition } from '@/components/PageTransition';
 import { NotificationSnackbar } from '@/components/ui/NotificationSnackbar';
 import { CharacterEditModal } from '@/components/CharacterEditModal';
@@ -96,7 +95,6 @@ export default function Home() {
   if (error) {
     return (
       <>
-        <MobileNavigation />
         <ResponsiveContainer sx={{ pt: isMobile ? 8 : 4 }}>
           <Box textAlign="center" mt={8}>
             <Typography variant="h5" color="error" gutterBottom>
@@ -113,7 +111,6 @@ export default function Home() {
 
   return (
     <>
-      <MobileNavigation />
 
       <ResponsiveContainer sx={{ pt: isMobile ? 8 : 4 }}>
         <Box textAlign="center" mb={isMobile ? 4 : 6} className="fade-in-up">

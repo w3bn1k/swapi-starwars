@@ -117,12 +117,15 @@ export function useCharactersWithPagination(): UseCharactersWithPaginationReturn
     } = useQuery({
         queryKey: ['characters-with-details', charactersData?.results],
         queryFn: async () => {
-            if (!charactersData?.results) return [];
+            if (!charactersData?.results) {
+                return [];
+            }
 
             const enriched = await Promise.all(
                 charactersData.results.map((character: Character) => enrichCharacter(character))
             );
 
+            console.log('Enriched characters:', enriched.length);
             return enriched;
         },
         enabled: !!charactersData?.results,

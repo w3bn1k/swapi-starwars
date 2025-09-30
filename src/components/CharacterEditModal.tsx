@@ -13,6 +13,8 @@ import {
     Chip,
     Paper,
     Stack,
+    useMediaQuery,
+    useTheme,
 } from '@mui/material';
 import { Save as SaveIcon, Cancel as CancelIcon } from '@mui/icons-material';
 import { useNotifications } from '@/hooks/useNotifications';
@@ -27,6 +29,8 @@ type TCharacterEditModal = {
 
 export function CharacterEditModal({ character, open, onClose, onSave }: TCharacterEditModal) {
     const { addSuccessNotification, addErrorNotification } = useNotifications();
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
     const [formData, setFormData] = useState<Partial<CharacterWithDetails>>({});
     const [isDirty, setIsDirty] = useState(false);
@@ -263,11 +267,19 @@ export function CharacterEditModal({ character, open, onClose, onSave }: TCharac
                 </Box>
             </DialogContent>
 
-            <DialogActions>
+            <DialogActions sx={{ gap: 2, justifyContent: 'center' }}>
                 <Button
                     onClick={handleCancel}
                     startIcon={<CancelIcon />}
                     color="inherit"
+                    size="large"
+                    sx={{
+                        minWidth: 140,
+                        fontSize: isMobile ? '0.75rem' : '0.875rem',
+                        '& .MuiButton-startIcon': {
+                            fontSize: isMobile ? '1rem' : '1.25rem',
+                        }
+                    }}
                 >
                     Cancel
                 </Button>
@@ -276,6 +288,14 @@ export function CharacterEditModal({ character, open, onClose, onSave }: TCharac
                     startIcon={<SaveIcon />}
                     variant="contained"
                     disabled={!isDirty}
+                    size="large"
+                    sx={{
+                        minWidth: 140,
+                        fontSize: isMobile ? '0.75rem' : '0.875rem',
+                        '& .MuiButton-startIcon': {
+                            fontSize: isMobile ? '1rem' : '1.25rem',
+                        }
+                    }}
                 >
                     Save Changes
                 </Button>
